@@ -26,7 +26,7 @@ func New() *app {
 	}
 	return &app{
 		DB:      bolt,
-		RootCmd: RootCmd,
+		RootCmd: rootCmd,
 	}
 }
 
@@ -35,14 +35,14 @@ func New() *app {
 // Anschließend wird der Haupt-Command der App ausgeführt.
 func (a *app) Run() {
 	if !a.RootCmd.HasSubCommands() {
-		a.bindCommands(Cmds)
+		a.bindCommands(commands())
 	}
 	a.RootCmd.Execute()
 }
 
 // Hängt ein Slice von Commands an den Haupt-Command der App. Diese Funktion
-// kann auch genutzt werden, um Commands nachträglich an den Haupt-Command
-// zu binden.
+// kann auch genutzt werden, um auch nachträglich beliebig viele Commands
+// an den Haupt-Command zu binden.
 func (a *app) bindCommands(cmds []*cobra.Command) {
 	for i, _ := range cmds {
 		a.RootCmd.AddCommand(cmds[i])
