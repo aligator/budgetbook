@@ -11,9 +11,10 @@ import (
 // ausgeführt wird. An diesen Haupt-Command werden mit bindCommands() die
 // verschiedenen Subcommands angehängt.
 type app struct {
-	DB      persistence.Database // Implementierung von persistence.Database.
-	RootCmd *cobra.Command       // Haupt-Command, an dem die Subcommands hängen.
-	Config  *viper.Viper         // Library zum Zugriff auf Config-Werte.
+	DB       persistence.Database // Implementierung von persistence.Database.
+	RootCmd  *cobra.Command       // Haupt-Command, an dem die Subcommands hängen.
+	Commands []*cobra.Command     // Die Subcommands der Anwendung.
+	Config   *viper.Viper         // Library zum Zugriff auf Config-Werte.
 }
 
 // Erzeugt eine neue Instanz der Anwendung. Hierbei wird eine leere Instanz einer
@@ -25,17 +26,18 @@ func New() *app {
 		return nil
 	}
 	return &app{
-		DB:      bolt,
-		RootCmd: rootCmd,
+		DB:       bolt,
+		RootCmd:  rootCmd,
+		Commands: commands(),
 	}
 }
 
 // Führt die Instanz der Anwendung aus. Sollten zu diesem Zeitpunkt noch keine
-// Subcommands an den Haupt-Command gehängtn worden sein, wird dies nachgeholt.
+// Subcommands an den Haupt-Command gehängt worden sein, wird dies nachgeholt.
 // Anschließend wird der Haupt-Command der App ausgeführt.
 func (a *app) Run() {
 	if !a.RootCmd.HasSubCommands() {
-		a.bindCommands(commands())
+		a.bindCommands(a.Commands)
 	}
 	a.RootCmd.Execute()
 }
