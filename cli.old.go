@@ -1,5 +1,9 @@
 package cli
 
+//
+// Lauffähig ist das hier nicht (mehr).
+//
+
 import (
 	"budgetBookFlex/app"
 	"fmt"
