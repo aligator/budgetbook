@@ -1,76 +1,68 @@
 package cli
 
-//
-// Lauffähig ist das hier nicht (mehr).
-//
-
 import (
-	"budgetBookFlex/app"
+	"budgetBookProto/intc"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"reflect"
 )
 
-type C struct {
-	Actual interface{}
+type Parser struct {
+	RootCmd        *cmdWrap
+	Cmds           []*cmdWrap
+	TfHandler      func(cmd *intc.Command) *cmdWrap
+	ExecuteHandler func(rootCmd *cmdWrap) *intc.Command
 }
 
-type UI struct {
-	RootCmd      *C
-	Cmds         []*C
-	TfHandler    func(cmd *app.Command) interface{}
-	ParseHandler func(rootCmd *C, cmds []*C) *app.Command
+type cmdWrap struct {
+	Cmd interface{}
 }
 
-func (m *UI) Transform(rootCmd *app.Command, cmds []*app.Command) {
-	tfCommand := m.TfHandler(rootCmd)
-	m.RootCmd = &C{
-		Actual: tfCommand,
+func (p *Parser) Transform(rootCmd *intc.Command, cmds []*intc.Command) {
+	p.RootCmd = &cmdWrap{
+		Cmd: p.TfHandler(rootCmd),
 	}
-	for _, appCmd := range cmds {
-		tfAppCmd := m.TfHandler(appCmd)
-		transformed := &C{
-			Actual: tfAppCmd,
+	for _, intcCmd := range cmds {
+		wrapper := &cmdWrap{
+			Cmd: p.TfHandler(intcCmd),
 		}
-		m.Cmds = append(m.Cmds, transformed)
+		p.Cmds = append(p.Cmds, wrapper)
 	}
 }
 
-func (m *UI) Parse() *app.Command {
-	return m.ParseHandler(m.RootCmd, m.Cmds)
+func (p *Parser) Execute() *intc.Command {
+	return p.ExecuteHandler(p.RootCmd)
 }
 
-// noinspection GoUnresolvedReference
-var Cobra = &UI{
-	RootCmd: &C{Actual: &cobra.Command{}},
-	Cmds:    []*C{},
-	TfHandler: func(cmd *app.Command) interface{} {
+var Cobra = &Parser{
+	RootCmd: &cmdWrap{
+		&cobra.Command{},
+	},
+	TfHandler: func(cmd *intc.Command) *cmdWrap {
 		cobraCmd := &cobra.Command{
 			Use: cmd.Use,
-			Run: func(cmd *cobra.Command, args []string) {
-				fmt.Println("So weit so gut.")
-			},
 		}
 		for _, f := range cmd.Flags {
 			cobraCmd.Flags().AddFlag(&pflag.Flag{
 				Name:      f.Name,
-				Shorthand: f.Short,
-				DefValue:  f.StdVal,
+				Shorthand: f.Shorthand,
+				DefValue:  f.DefValue,
 			})
 		}
-		return cobraCmd
+		return &cmdWrap{
+			Cmd: cobraCmd,
+		}
 	},
-	ParseHandler: func(rootCmd *C, cmds []*C) *app.Command {
-		_, isCobra := rootCmd.Actual.(cobra.Command)
-		if !isCobra {
-			return nil
+	ExecuteHandler: func(rootCmd *cmdWrap) *intc.Command {
+		root := rootCmd.Cmd
+		cmd, _ := root.(*cobra.Command)
+		fmt.Println(reflect.TypeOf(root), reflect.TypeOf(cmd))
+		if true {
+			execCmd, _ := cmd.ExecuteC()
+			fmt.Println(execCmd.Use)
 		}
-		for _, cmd := range cmds {
-			if _, ok := cmd.Actual.(cobra.Command); ok {
-				rootCmd.Actual.AddComand(cmd)
-			}
-		}
-		rootCmd.Execute()
+		fmt.Println("ExecuteSchiefgelaufen")
 		return nil
 	},
 }
