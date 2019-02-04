@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"budgetBookPrototype/intc"
+	"budgetBook/intc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )

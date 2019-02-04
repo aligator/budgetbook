@@ -1,9 +1,9 @@
 package persist
 
-import "budgetBookPrototype/cmp"
+import "budgetBook/cmp"
 
 const (
-	dbname   = "budgetbook"
+	dbName   = "budgetbook"
 	txTable  = "transactions"
 	catTable = "categories"
 )
@@ -12,7 +12,7 @@ const (
 // performed on the models of the cmp package.
 type Database interface {
 	Setup() error                            // Initializes the DB and creates the required tables if necessary.
-	Insert(e cmp.Entity) error               // Inserts an entity. Returns an error if insertion fails.
+	Insert(e *cmp.Entity) error              // Inserts an entity. Returns an error if insertion fails.
 	SelectAll(table string) []*cmp.Entity    // Selects all rows from a given table.
 	SelectById(table, id string) *cmp.Entity // Selects one specific row matching a given id.
 }
@@ -31,7 +31,7 @@ func (b *Bolt) Setup() error {
 }
 
 // Implements Database.Insert().
-func (b *Bolt) Insert(e cmp.Entity) error {
+func (b *Bolt) Insert(e *cmp.Entity) error {
 	return nil
 }
 
