@@ -1,6 +1,6 @@
 package main
 
-import "budgetBook/app"
+import "budgetBookPrototype/app"
 
 func main() {
 	app.New().Run()

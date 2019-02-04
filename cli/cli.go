@@ -8,17 +8,17 @@ import (
 
 var Cobra = &_cobra{}
 
-// Proxy defines a method set for transforming an intc.Command into a concrete
-// CLI command provided by the corresponding library.
+// Proxy defines a method set for transforming an intc.Command into a
+// concrete CLI command provided by the corresponding library.
 type Proxy interface {
 	Setup(rootCmd *intc.Command, cs []*intc.Command) // Initializes the Proxy by transforming a given command set.
 	transform(cmd *intc.Command) interface{}         // Transforms a given intc.Command into a concrete command type.
 	Parse() *intc.Command                            // Parses the CLI input and returns the data as a intc.Command.
 }
 
-// Cobra is only one of several possible implementations of Proxy. It refers
-// to the Cobra library (see github.com/spf13/cobra) and therefore holds
-// instances of cobra.Command as struct member variables.
+// Cobra is only one of several possible implementations of Proxy. It
+// refers to the Cobra library (see github.com/spf13/cobra) and therefore
+// holds instances of cobra.Command as struct member variables.
 type _cobra struct {
 	RootCmd *cobra.Command
 	CmdSet  []*cobra.Command

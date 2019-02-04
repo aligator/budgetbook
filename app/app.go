@@ -3,6 +3,7 @@ package app
 import (
 	"budgetBookPrototype/cli"
 	"budgetBookPrototype/intc"
+	"budgetBookPrototype/persist"
 )
 
 // app represents the application itself. Essentially, it consists of a root
@@ -11,6 +12,7 @@ import (
 type app struct {
 	RootCmd *intc.Command
 	CmdSet  []*intc.Command
+	DB      persist.Database
 	Proxy   cli.Proxy
 }
 
@@ -20,8 +22,10 @@ func New() *app {
 	a := &app{
 		RootCmd: rootCmd,
 		CmdSet:  cmdSet,
+		DB:      &persist.Bolt{},
 		Proxy:   cli.Cobra,
 	}
+	_ = a.DB.Setup()
 	a.Proxy.Setup(a.RootCmd, a.CmdSet)
 	return a
 }
@@ -32,16 +36,27 @@ func (a *app) Run() {
 	_ = a.Proxy.Parse()
 }
 
-// Builds the entire command set including the root command. Also, the
-// controllers for handling the command's execution are assigned.
-// buildCommandSet() returns interchangeable, general purpose commands
-// that can be transformed by an cli.Proxy for parsing the CLI input.
+// Builds the entire command set including the root command and returns
+// interchangeable, general purpose commands that can be transformed by
+// an cli.Proxy for parsing the CLI input.
 func buildCommandSet() (*intc.Command, []*intc.Command) {
 	rootCmd := &intc.Command{
 		Use:     "budgetbook",
-		Help:    "",
+		Help:    ``,
 		Options: nil,
 		Run:     nil,
 	}
-	return rootCmd, nil
+	addCategory := &intc.Command{
+		Use:  "add-cat",
+		Help: ``,
+		Options: []*intc.Flag{
+			{
+				Name:      "name",
+				Shorthand: "n",
+				DefVal:    "",
+			},
+		},
+	}
+	cmdSet := []*intc.Command{addCategory}
+	return rootCmd, cmdSet
 }
