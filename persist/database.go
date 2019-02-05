@@ -1,7 +1,6 @@
 package persist
 
 import (
-	"budgetBook/cmp"
 	"github.com/boltdb/bolt"
 	"os"
 )
@@ -12,17 +11,18 @@ const (
 	catTable = "categories"
 )
 
-// Database provides functions for the common CRUD operations that can be
-// performed on the models of the cmp package.
+// Database provides functions for the common CRUD operations. Since this
+// interface depicts the most abstracted form of a database, it simply
+// stores byte arrays.
 type Database interface {
 	// Initializes the DB and creates the required tables if necessary.
 	Setup() error
-	// Inserts an entity. Returns an error if insertion fails.
-	Insert(es ...*cmp.Entity) error
+	// Inserts an byte array value. Returns an error if insertion fails.
+	Insert(id, value []byte, table string) error
 	// Selects all rows from a given table.
-	SelectAll(table string) []*cmp.Entity
+	SelectAll(table string) [][]byte
 	// Selects one specific row matching a given id.
-	SelectById(table, id string) *cmp.Entity
+	SelectById(table string, id []byte) []byte
 }
 
 // Bolt is the most common database to use since it does not need any
@@ -59,16 +59,16 @@ func (b *Bolt) Setup() error {
 }
 
 // Implements Database.Insert().
-func (b *Bolt) Insert(es ...*cmp.Entity) error {
+func (b *Bolt) Insert(id, value []byte, table string) error {
 	return nil
 }
 
 // Implements Database.SelectAll().
-func (b *Bolt) SelectAll(table string) []*cmp.Entity {
+func (b *Bolt) SelectAll(table string) [][]byte {
 	return nil
 }
 
 // Implements Database.SelectById().
-func (b *Bolt) SelectById(table, id string) *cmp.Entity {
+func (b *Bolt) SelectById(table string, id []byte) []byte {
 	return nil
 }
