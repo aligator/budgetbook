@@ -67,6 +67,9 @@ func (c *_cobra) Parse() *intc.Command {
 	return nil
 }
 
+// findInCtrSet searches a given cobra Command in the container set of the
+// parser. Its primary purpose is to determine the specific command that
+// has been executed in Proxy.Parse().
 func (c *_cobra) findInCtrSet(cmd *cobra.Command) *container {
 	if c.Root.Cmd.Use == cmd.Use {
 		return c.Root
