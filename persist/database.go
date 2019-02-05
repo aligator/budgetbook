@@ -89,5 +89,14 @@ func (b *Bolt) SelectAll(table string) [][]byte {
 
 // Implements Database.SelectById().
 func (b *Bolt) SelectById(table string, id []byte) []byte {
-	return nil
+	var r []byte
+	selectById := func(btx *bolt.Tx) error {
+		bucket := btx.Bucket(b.buckets[table])
+		if bucket != nil {
+			r = bucket.Get(id)
+		}
+		return nil
+	}
+	_ = b.db.View(selectById)
+	return r
 }
