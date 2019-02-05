@@ -73,7 +73,7 @@ func (b *Bolt) Insert(id, value []byte, table string) error {
 // Implements Database.SelectAll().
 func (b *Bolt) SelectAll(table string) [][]byte {
 	var r [][]byte
-	_ = b.db.View(func(btx *bolt.Tx) error {
+	selectAll := func(btx *bolt.Tx) error {
 		bucket := btx.Bucket(b.buckets[table])
 		if bucket != nil {
 			bucket.ForEach(func(id, value []byte) error {
@@ -82,7 +82,8 @@ func (b *Bolt) SelectAll(table string) [][]byte {
 			})
 		}
 		return nil
-	})
+	}
+	_ = b.db.View(selectAll)
 	return r
 }
 
