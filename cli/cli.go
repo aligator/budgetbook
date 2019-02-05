@@ -18,8 +18,9 @@ type Proxy interface {
 	Parse() *intc.Command
 }
 
-// container basically wraps the actual command and holds a simple map
-// of pointers returned by the transformed flags.
+// container basically wraps the actual command and holds a simple map of
+// pointers returned by the transformed flags. After executing the command,
+// the store's values may be used for the intc.Command returned by Parse().
 type container struct {
 	Cmd       *cobra.Command
 	FlagStore map[string]interface{}
@@ -61,6 +62,19 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 
 // Implements Proxy.Parse().
 func (c *_cobra) Parse() *intc.Command {
-	c.Root.Cmd.Execute()
+	cmd, _ := c.Root.Cmd.ExecuteC()
+	_ = c.findInCtrSet(cmd)
+	return nil
+}
+
+func (c *_cobra) findInCtrSet(cmd *cobra.Command) *container {
+	if c.Root.Cmd.Use == cmd.Use {
+		return c.Root
+	}
+	for _, ctr := range c.CtrSet {
+		if ctr.Cmd.Use == cmd.Use {
+			return ctr
+		}
+	}
 	return nil
 }
