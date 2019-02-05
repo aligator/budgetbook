@@ -30,7 +30,7 @@ func New() *app {
 	return a
 }
 
-// Runs the application by parsing the CLI input, transforming it into a
+// Runs the application by parsing the CLI input, transforming it into an
 // interchangeable command and executing that specific command.
 func (a *app) Run() {
 	_ = a.Proxy.Parse()
@@ -53,6 +53,7 @@ func buildCommandSet() (*intc.Command, []*intc.Command) {
 			{
 				Name:      "name",
 				Shorthand: "n",
+				Help:      ``,
 				DefVal:    "",
 			},
 		},

@@ -18,6 +18,7 @@ type Command struct {
 type Flag struct {
 	Name      string
 	Shorthand string
+	Help      string
 	DefVal    string
 	Store     interface{}
 }

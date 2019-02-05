@@ -51,7 +51,7 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	fs := make(map[string]interface{})
 	cobraCmd.SetHelpTemplate(cmd.Help)
 	for _, opt := range cmd.Options {
-		fs[opt.Name] = cobraCmd.Flags().StringP(opt.Name, opt.Shorthand, opt.DefVal, "")
+		fs[opt.Name] = cobraCmd.Flags().StringP(opt.Name, opt.Shorthand, opt.DefVal, opt.Help)
 	}
 	return &container{
 		Cmd:       cobraCmd,
