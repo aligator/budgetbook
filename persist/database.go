@@ -2,6 +2,7 @@ package persist
 
 import (
 	"github.com/boltdb/bolt"
+	"github.com/pkg/errors"
 	"os"
 )
 
@@ -60,12 +61,29 @@ func (b *Bolt) Setup() error {
 
 // Implements Database.Insert().
 func (b *Bolt) Insert(id, value []byte, table string) error {
-	return nil
+	return b.db.Update(func(btx *bolt.Tx) error {
+		bucket := btx.Bucket(b.buckets[table])
+		if bucket != nil {
+			return bucket.Put(id, value)
+		}
+		return errors.New("specified table not found")
+	})
 }
 
 // Implements Database.SelectAll().
 func (b *Bolt) SelectAll(table string) [][]byte {
-	return nil
+	var r [][]byte
+	_ = b.db.View(func(btx *bolt.Tx) error {
+		bucket := btx.Bucket(b.buckets[table])
+		if bucket != nil {
+			bucket.ForEach(func(id, value []byte) error {
+				r = append(r, value)
+				return nil
+			})
+		}
+		return nil
+	})
+	return r
 }
 
 // Implements Database.SelectById().
