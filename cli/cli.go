@@ -14,6 +14,8 @@ type Proxy interface {
 	Setup(rootCmd *intc.Command, cs []*intc.Command)
 	// Transforms a given intc.Command into a concrete command type.
 	transform(cmd *intc.Command) *container
+	// Describes the inverse function of transform().
+	inverse(ctn *container) *intc.Command
 	// Parses the CLI input and returns the data as a intc.Command.
 	Parse() *intc.Command
 }
@@ -22,7 +24,7 @@ type Proxy interface {
 // pointers returned by the transformed flags. After executing the command,
 // the store's values may be used for the intc.Command returned by Parse().
 type container struct {
-	Cmd       *cobra.Command
+	Cmd       interface{}
 	FlagStore map[string]interface{}
 }
 
@@ -38,9 +40,17 @@ type _cobra struct {
 func (c *_cobra) Setup(rootCmd *intc.Command, cmds []*intc.Command) {
 	c.Root = c.transform(rootCmd)
 	for _, cmd := range cmds {
-		tfContainer := c.transform(cmd)
-		c.CtrSet = append(c.CtrSet, tfContainer)
-		c.Root.Cmd.AddCommand(tfContainer.Cmd)
+		// Transform the interchangeable command into a container and add
+		// it to the container set
+		tfCtn := c.transform(cmd)
+		c.CtrSet = append(c.CtrSet, tfCtn)
+		// Cast both the root command and the container's command to cobra
+		// commands so that AddCommand() can work type safe.
+		cobraRootCmd, ok := c.Root.Cmd.(*cobra.Command)
+		ctnCmd, ok := tfCtn.Cmd.(*cobra.Command)
+		if ok {
+			cobraRootCmd.AddCommand(ctnCmd)
+		}
 	}
 }
 
@@ -52,6 +62,7 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	fs := make(map[string]interface{})
 	cobraCmd.SetHelpTemplate(cmd.Help)
 	for _, opt := range cmd.Options {
+		// Map the returned pointer to the flag value against its name.
 		fs[opt.Name] = cobraCmd.Flags().StringP(opt.Name, opt.Shorthand, opt.DefVal, opt.Help)
 	}
 	return &container{
@@ -60,10 +71,18 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	}
 }
 
+// Implements Proxy.inverse().
+func (c *_cobra) inverse(ctn *container) *intc.Command {
+	return nil
+}
+
 // Implements Proxy.Parse().
 func (c *_cobra) Parse() *intc.Command {
-	cmd, _ := c.Root.Cmd.ExecuteC()
-	_ = c.findInCtrSet(cmd)
+	rootCmd, ok := c.Root.Cmd.(*cobra.Command)
+	if ok {
+		cmd, _ := rootCmd.ExecuteC()
+		_ = c.findInCtrSet(cmd)
+	}
 	return nil
 }
 
@@ -71,12 +90,16 @@ func (c *_cobra) Parse() *intc.Command {
 // parser. Its primary purpose is to determine the specific command that
 // has been executed in Proxy.Parse().
 func (c *_cobra) findInCtrSet(cmd *cobra.Command) *container {
-	if c.Root.Cmd.Use == cmd.Use {
-		return c.Root
+	if rootCmd, ok := c.Root.Cmd.(*cobra.Command); ok {
+		if rootCmd.Use == cmd.Use {
+			return c.Root
+		}
 	}
 	for _, ctr := range c.CtrSet {
-		if ctr.Cmd.Use == cmd.Use {
-			return ctr
+		if ctrCmd, ok := ctr.Cmd.(*cobra.Command); ok {
+			if ctrCmd.Use == cmd.Use {
+				return ctr
+			}
 		}
 	}
 	return nil
