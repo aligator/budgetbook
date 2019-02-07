@@ -95,7 +95,7 @@ func (c *_cobra) Parse() *intc.Command {
 		// Receive the executed command, find and inverse transform it to
 		// an interchangeable command filled with data by the flag store.
 		cmd, _ := rootCmd.ExecuteC()
-		_ = c.findInCtrSet(cmd)
+		return c.inverse(c.findInCtrSet(cmd))
 	}
 	return nil
 }
