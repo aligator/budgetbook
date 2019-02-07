@@ -41,7 +41,7 @@ func (c *_cobra) Setup(rootCmd *intc.Command, cmds []*intc.Command) {
 	c.Root = c.transform(rootCmd)
 	for _, cmd := range cmds {
 		// Transform the interchangeable command into a container and add
-		// it to the container set
+		// it to the container set.
 		tfCtn := c.transform(cmd)
 		c.CtrSet = append(c.CtrSet, tfCtn)
 		// Cast both the root command and the container's command to cobra
@@ -78,11 +78,10 @@ func (c *_cobra) inverse(ctn *container) *intc.Command {
 			Use: ctnCmd.Use,
 		}
 		for key, val := range ctn.FlagStore {
-			flag := &intc.Flag{
+			cmd.AddFlag(&intc.Flag{
 				Name: key,
 				Store: val,
-			}
-			cmd.AddFlag(flag)
+			})
 		}
 		return cmd
 	}
