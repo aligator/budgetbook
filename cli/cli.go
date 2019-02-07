@@ -59,8 +59,8 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	cobraCmd := &cobra.Command{
 		Use: cmd.Use,
 	}
-	fs := make(map[string]interface{})
 	cobraCmd.SetHelpTemplate(cmd.Help)
+	fs := make(map[string]interface{})
 	for _, opt := range cmd.Options {
 		// Map the returned pointer to the flag value against its name.
 		fs[opt.Name] = cobraCmd.Flags().StringP(opt.Name, opt.Shorthand, opt.DefVal, opt.Help)
@@ -73,6 +73,18 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 
 // Implements Proxy.inverse().
 func (c *_cobra) inverse(ctn *container) *intc.Command {
+	if ctnCmd, ok := ctn.Cmd.(*cobra.Command); ok {
+		cmd := &intc.Command{
+			Use: ctnCmd.Use,
+		}
+		for key, val := range ctn.FlagStore {
+			cmd.AddFlag(&intc.Flag{
+				Name: key,
+				Store: val,
+			})
+		}
+		return cmd
+	}
 	return nil
 }
 
@@ -80,6 +92,8 @@ func (c *_cobra) inverse(ctn *container) *intc.Command {
 func (c *_cobra) Parse() *intc.Command {
 	rootCmd, ok := c.Root.Cmd.(*cobra.Command)
 	if ok {
+		// Receive the executed command, find and inverse transform it to
+		// an interchangeable command filled with data by the flag store.
 		cmd, _ := rootCmd.ExecuteC()
 		_ = c.findInCtrSet(cmd)
 	}
@@ -88,7 +102,7 @@ func (c *_cobra) Parse() *intc.Command {
 
 // findInCtrSet searches a given cobra Command in the container set of the
 // parser. Its primary purpose is to determine the specific command that
-// has been executed in Proxy.Parse().
+// has been executed in Proxy.Parse() to access its flag store.
 func (c *_cobra) findInCtrSet(cmd *cobra.Command) *container {
 	if rootCmd, ok := c.Root.Cmd.(*cobra.Command); ok {
 		if rootCmd.Use == cmd.Use {
