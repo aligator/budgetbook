@@ -33,7 +33,7 @@ func New() *app {
 // Runs the application by parsing the CLI input, transforming it into an
 // interchangeable command and executing that specific command.
 func (a *app) Run() {
-	_ = a.Proxy.Parse()
+	_ := a.Proxy.Parse()
 }
 
 // Builds the entire command set including the root command and returns

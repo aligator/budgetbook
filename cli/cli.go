@@ -25,7 +25,7 @@ type Proxy interface {
 // the store's values may be used for the intc.Command returned by Parse().
 type container struct {
 	Cmd       interface{}
-	FlagStore map[string]interface{}
+	FlagStore map[string]*string
 }
 
 // Cobra is only one of several possible implementations of Proxy. It
@@ -60,7 +60,7 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 		Use: cmd.Use,
 	}
 	cobraCmd.SetHelpTemplate(cmd.Help)
-	fs := make(map[string]interface{})
+	fs := make(map[string]*string)
 	for _, opt := range cmd.Options {
 		// Map the returned pointer to the flag value against its name.
 		fs[opt.Name] = cobraCmd.Flags().StringP(opt.Name, opt.Shorthand, opt.DefVal, opt.Help)
@@ -80,7 +80,7 @@ func (c *_cobra) inverse(ctn *container) *intc.Command {
 		for key, val := range ctn.FlagStore {
 			cmd.AddFlag(&intc.Flag{
 				Name: key,
-				Store: val,
+				Store: *val,
 			})
 		}
 		return cmd
