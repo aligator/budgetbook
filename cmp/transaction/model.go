@@ -20,7 +20,7 @@ type Tx struct {
 // Although Tx is an exported type, it is recommended to use this factory
 // since it includes the creation of the entity ID.
 func New(date time.Time, txType cmp.Type, category *category.Cat, value int) *Tx {
-	id := date.Format(time.RFC3339)
+	id := RetrieveID(date)
 	t := &Tx{
 		Entity: cmp.Entity{
 			ID: id,
@@ -35,9 +35,7 @@ func New(date time.Time, txType cmp.Type, category *category.Cat, value int) *Tx
 
 // Creates an appropriate entity ID by converting a given date into a
 // corresponding string value.
-func retrieveID(date time.Time) string {
+func RetrieveID(date time.Time) string {
 	layout := time.RFC3339
 	return date.Format(layout)
 }
-
-
