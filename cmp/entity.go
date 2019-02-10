@@ -5,15 +5,20 @@ package cmp
 type Type int
 
 const (
-	// Represents an financial income.
+	// Represents a financial income.
 	Inc Type = iota
-	// Represents an financial expenditure.
+	// Represents a financial expenditure.
 	Exp Type = iota
 )
 
-// Entity represents a general purpose model. It is mainly used as an
-// anonymous member to carry out the polymorphism mechanism, meaning that
-// Entity is representative for all models stored in the cmp package.
-type Entity struct {
-	ID string `json:"id"`
+// Entity represents any model stored in the cmp package. It is mainly used
+// to carry out the polymorphism mechanism and to prescribe the marshalling
+// methods.
+type Entity interface {
+	// Forces the entity implementation to provide an ID.
+	ID() string
+	// Converts the entity into JSON.
+	MarshalJSON() ([]byte, error)
+	// Fills an empty entity with values from JSON.
+	UnmarshalJSON(json []byte) error
 }
