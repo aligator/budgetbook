@@ -39,6 +39,31 @@ func New(date time.Time, txType cmp.Type, category *category.Cat, value int) *Tx
 	return t
 }
 
+// Implements Entity.MarshalJSON().
+func (t *Tx) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+// Implements Entity.UnmarshalJSON().
+func (t *Tx) UnmarshalJSON(json []byte) error {
+	return nil
+}
+
+// Implements Entity.ID().
+func (t *Tx) ID() string { return t.id }
+
+// Getter for date.
+func (t *Tx) Date() time.Time { return t.date }
+
+// Getter for txType.
+func (t *Tx) TxType() cmp.Type { return t.txType }
+
+// Getter für category.
+func (t *Tx) Category() *category.Cat { return t.category }
+
+// Getter für value.
+func (t *Tx) Value() int { return t.value }
+
 // Creates an appropriate transaction ID by converting a given date into
 // a corresponding string value.
 func RetrieveID(date time.Time) string {

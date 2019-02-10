@@ -39,6 +39,19 @@ func New(name string, isInc bool, isCapped bool, budget int) *Cat {
 	return c
 }
 
+// Implements Entity.MarshalJSON().
+func (c *Cat) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+// Implements Entity.UnmarshalJSON().
+func (c *Cat) UnmarshalJSON(json []byte) error {
+	return nil
+}
+
+// Implements Entity.ID().
+func (c *Cat) ID() string { return c.id }
+
 // Creates an appropriate category ID based on its name.
 func RetrieveID(name string) string {
 	// In this particular case the ID just corresponds to the name. However,
