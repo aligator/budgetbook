@@ -52,6 +52,18 @@ func (c *Cat) UnmarshalJSON(json []byte) error {
 // Implements Entity.ID().
 func (c *Cat) ID() string { return c.id }
 
+// Getter for name.
+func (c *Cat) Name() string { return c.name }
+
+// Getter for isInc.
+func (c *Cat) IsInc() bool { return c.isInc }
+
+// Getter for isCapped.
+func (c *Cat) IsCapped() bool { return c.isCapped }
+
+// Getter for budget.
+func (c *Cat) Budget() int { return c.budget }
+
 // Creates an appropriate category ID based on its name.
 func RetrieveID(name string) string {
 	// In this particular case the ID just corresponds to the name. However,
