@@ -1,5 +1,7 @@
 package category
 
+import "encoding/json"
+
 // Cat represents any type of financial transaction category.
 type Cat struct {
 	id       string
@@ -39,13 +41,35 @@ func New(name string, isInc bool, isCapped bool, budget int) *Cat {
 	return c
 }
 
+// Creates an appropriate category ID based on its name.
+func RetrieveID(name string) string {
+	// In this particular case the ID just corresponds to the name. However,
+	// if that changes at any time, this function won't loose its validity.
+	return name
+}
+
 // Implements Entity.MarshalJSON().
 func (c *Cat) MarshalJSON() ([]byte, error) {
-	return nil, nil
+	return json.Marshal(&exporter{
+		ID:       c.id,
+		Name:     c.name,
+		IsInc:    c.isInc,
+		IsCapped: c.isCapped,
+		Budget:   c.budget,
+	})
 }
 
 // Implements Entity.UnmarshalJSON().
-func (c *Cat) UnmarshalJSON(json []byte) error {
+func (c *Cat) UnmarshalJSON(b []byte) error {
+	exp := &exporter{}
+	if err := json.Unmarshal(b, exp); err != nil {
+		return err
+	}
+	c.id = exp.ID
+	c.name = exp.Name
+	c.isInc = exp.IsInc
+	c.isCapped = exp.IsCapped
+	c.budget = exp.Budget
 	return nil
 }
 
@@ -63,10 +87,3 @@ func (c *Cat) IsCapped() bool { return c.isCapped }
 
 // Getter for budget.
 func (c *Cat) Budget() int { return c.budget }
-
-// Creates an appropriate category ID based on its name.
-func RetrieveID(name string) string {
-	// In this particular case the ID just corresponds to the name. However,
-	// if that changes at any time, this function won't loose its validity.
-	return name
-}

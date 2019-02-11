@@ -20,5 +20,5 @@ type Entity interface {
 	// Converts the entity into JSON.
 	MarshalJSON() ([]byte, error)
 	// Fills an empty entity with values from JSON.
-	UnmarshalJSON(json []byte) error
+	UnmarshalJSON(b []byte) error
 }

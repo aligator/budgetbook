@@ -3,6 +3,7 @@ package transaction
 import (
 	"budgetBook/cmp"
 	"budgetBook/cmp/category"
+	"encoding/json"
 	"time"
 )
 
@@ -17,11 +18,11 @@ type Tx struct {
 
 // Helper struct for making the Cat type's fields exportable.
 type exporter struct {
-	ID       string       `json:"id"`
-	Date     time.Time    `json:"date"`
-	TxType   cmp.Type     `json:"type"`
-	Category category.Cat `json:"category"`
-	Value    int          `json:"value"`
+	ID       string        `json:"id"`
+	Date     time.Time     `json:"date"`
+	TxType   cmp.Type      `json:"type"`
+	Category *category.Cat `json:"category"`
+	Value    int           `json:"value"`
 }
 
 // Creates a new instance of Tx and returns a pointer to that instance.
@@ -39,13 +40,35 @@ func New(date time.Time, txType cmp.Type, category *category.Cat, value int) *Tx
 	return t
 }
 
+// Creates an appropriate transaction ID by converting a given date into
+// a corresponding string value.
+func RetrieveID(date time.Time) string {
+	layout := time.RFC3339
+	return date.Format(layout)
+}
+
 // Implements Entity.MarshalJSON().
 func (t *Tx) MarshalJSON() ([]byte, error) {
-	return nil, nil
+	return json.Marshal(&exporter{
+		ID:       t.id,
+		Date:     t.date,
+		TxType:   t.txType,
+		Category: t.category,
+		Value:    t.value,
+	})
 }
 
 // Implements Entity.UnmarshalJSON().
-func (t *Tx) UnmarshalJSON(json []byte) error {
+func (t *Tx) UnmarshalJSON(b []byte) error {
+	exp := &exporter{}
+	if err := json.Unmarshal(b, exp); err != nil {
+		return err
+	}
+	t.id = exp.ID
+	t.date = exp.Date
+	t.txType = exp.TxType
+	t.category = exp.Category
+	t.value = exp.Value
 	return nil
 }
 
@@ -63,10 +86,3 @@ func (t *Tx) Category() *category.Cat { return t.category }
 
 // Getter für value.
 func (t *Tx) Value() int { return t.value }
-
-// Creates an appropriate transaction ID by converting a given date into
-// a corresponding string value.
-func RetrieveID(date time.Time) string {
-	layout := time.RFC3339
-	return date.Format(layout)
-}
