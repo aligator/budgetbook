@@ -60,7 +60,7 @@ func (c *_cobra) inverse(ctn *container) *intc.Command {
 			Use: ctnCmd.Use,
 		}
 		for key, val := range ctn.FlagStore {
-			cmd.AddFlag(&intc.Flag{
+			cmd.AddFlag(&intc.Param{
 				Name:  key,
 				Store: *val,
 			})

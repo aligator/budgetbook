@@ -2,7 +2,6 @@ package app
 
 import (
 	"budgetBook/intc"
-	"fmt"
 )
 
 // Builds the entire command set including the root command and returns
@@ -18,18 +17,11 @@ func buildCommandSet() (*intc.Command, []*intc.Command) {
 	addCategory := &intc.Command{
 		Use:  "add-cat",
 		Help: ``,
-		Options: []*intc.Flag{
+		Options: []*intc.Param{
 			{Name: "name", Shorthand: "n", Help: ``, DefVal: ""},
-			{Name: "inc", Shorthand: "inc", Help: ``, DefVal: ""},
+			{Name: "inc", Shorthand: "", Help: ``, DefVal: ""},
 			{Name: "capped", Shorthand: "c", Help: ``, DefVal: ""},
 			{Name: "budget", Shorthand: "b", Help: ``, DefVal: ""},
-		},
-		Run: func(options []*intc.Flag) error {
-			// Testing flag store values.
-			for _, opt := range options {
-				fmt.Println(opt.Name, ":", opt.Store)
-			}
-			return nil
 		},
 	}
 	cmdSet := []*intc.Command{addCategory}
