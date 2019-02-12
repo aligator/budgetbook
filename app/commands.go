@@ -22,6 +22,24 @@ func buildCommandSet() (*intc.Command, []*intc.Command) {
 				Help:      ``,
 				DefVal:    "",
 			},
+			{
+				Name:      "inc",
+				Shorthand: "inc",
+				Help:      ``,
+				DefVal:    "",
+			},
+			{
+				Name:      "capped",
+				Shorthand: "c",
+				Help:      ``,
+				DefVal:    "",
+			},
+			{
+				Name:      "budget",
+				Shorthand: "b",
+				Help:      ``,
+				DefVal:    "",
+			},
 		},
 	}
 	cmdSet := []*intc.Command{addCategory}
