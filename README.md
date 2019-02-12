@@ -1,3 +1,3 @@
 <p align="center">
-  ![BudgetBook logo](https://sternentstehung.de/budgetbook.png)
+  <img src="https://sternentstehung.de/budgetbook.png" alt="BudgetBook" />
 </p>
