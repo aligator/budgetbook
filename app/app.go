@@ -35,7 +35,7 @@ func New() *app {
 // interchangeable command and executing that specific command.
 func (a *app) Run() {
 	execCmd := a.Proxy.Parse()
-	for _, opt := range execCmd.Options {
+	for _, opt := range execCmd.Params {
 		if opt.Store == nil {
 			opt.Store = "-"
 		}

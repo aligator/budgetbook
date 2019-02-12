@@ -38,7 +38,7 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	}
 	cobraCmd.SetHelpTemplate(cmd.Help)
 	fs := make(map[string]*string)
-	for _, opt := range cmd.Options {
+	for _, opt := range cmd.Params {
 		// Map the returned pointer to the flag value against its name.
 		// Add the flag shorthand only if the shorthand is not empty.
 		if opt.Shorthand != "" {

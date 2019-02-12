@@ -9,15 +9,15 @@ import (
 // an cli.Proxy for parsing the CLI input.
 func buildCommandSet() (*intc.Command, []*intc.Command) {
 	rootCmd := &intc.Command{
-		Use:     "budgetbook",
-		Help:    ``,
-		Options: nil,
-		Run:     nil,
+		Use:    "budgetbook",
+		Help:   ``,
+		Params: nil,
+		Run:    nil,
 	}
 	addCategory := &intc.Command{
 		Use:  "add-cat",
 		Help: ``,
-		Options: []*intc.Param{
+		Params: []*intc.Param{
 			{Name: "name", Shorthand: "n", Help: ``, DefVal: ""},
 			{Name: "inc", Shorthand: "", Help: ``, DefVal: ""},
 			{Name: "capped", Shorthand: "c", Help: ``, DefVal: ""},
