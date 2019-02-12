@@ -40,7 +40,12 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	fs := make(map[string]*string)
 	for _, opt := range cmd.Options {
 		// Map the returned pointer to the flag value against its name.
-		fs[opt.Name] = cobraCmd.Flags().StringP(opt.Name, opt.Shorthand, opt.DefVal, opt.Help)
+		// Add the flag shorthand only if the shorthand is not empty.
+		if opt.Shorthand != "" {
+			fs[opt.Name] = cobraCmd.Flags().StringP(opt.Name, opt.Shorthand, opt.DefVal, opt.Help)
+		} else {
+			fs[opt.Name] = cobraCmd.Flags().String(opt.Name, opt.DefVal, opt.Help)
+		}
 	}
 	return &container{
 		Cmd:       cobraCmd,
@@ -56,7 +61,7 @@ func (c *_cobra) inverse(ctn *container) *intc.Command {
 		}
 		for key, val := range ctn.FlagStore {
 			cmd.AddFlag(&intc.Flag{
-				Name: key,
+				Name:  key,
 				Store: *val,
 			})
 		}
