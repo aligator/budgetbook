@@ -6,14 +6,14 @@ import (
 )
 
 type repository struct {
-	DB persist.Database
+	db persist.Database
 }
 
 func NewRepository() *repository {
 	r := &repository{
-		DB: &persist.Bolt{},
+		db: &persist.Bolt{},
 	}
-	_ = r.DB.Setup()
+	_ = r.db.Setup()
 	return r
 }
 

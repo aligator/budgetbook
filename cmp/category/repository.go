@@ -7,14 +7,14 @@ import (
 )
 
 type repository struct {
-	DB persist.Database
+	db persist.Database
 }
 
 func NewRepository() *repository {
 	r := &repository{
-		DB: &persist.Bolt{},
+		db: &persist.Bolt{},
 	}
-	_ = r.DB.Setup()
+	_ = r.db.Setup()
 	return r
 }
 
@@ -32,7 +32,7 @@ func (r *repository) FindAll() []cmp.Entity {
 func (r *repository) Insert(e cmp.Entity) error {
 	id := e.ID()
 	if bytes, err := e.(*Cat).MarshalJSON(); err != nil {
-		return r.DB.Insert([]byte(id), bytes, persist.CatTable)
+		return r.db.Insert([]byte(id), bytes, persist.CatTable)
 	}
 	return nil
 }
