@@ -18,10 +18,12 @@ func buildCommandSet() (*intc.Command, []*intc.Command) {
 		Use:  "add-cat",
 		Help: ``,
 		Params: []*intc.Param{
-			{Name: "name", Shorthand: "n", Help: ``, DefVal: ""},
-			{Name: "inc", Shorthand: "", Help: ``, DefVal: ""},
-			{Name: "capped", Shorthand: "c", Help: ``, DefVal: ""},
-			{Name: "budget", Shorthand: "b", Help: ``, DefVal: ""},
+			intc.NewParam("name", "n", ``, ""),
+			intc.NewParam("budget", "b", ``, ""),
+		},
+		Options: []*intc.Option{
+			intc.NewOption("is-inc", "i", ``, false),
+			intc.NewOption("is-capped", "c", ``, false),
 		},
 	}
 	cmdSet := []*intc.Command{addCategory}
