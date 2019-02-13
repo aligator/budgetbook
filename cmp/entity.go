@@ -27,14 +27,14 @@ type Entity interface {
 // types implement the essential methods listed below.
 type Repository interface {
 	// Finds an entity by id.
-	Find(id string) *Entity
+	Find(id string) Entity
 	// Returns all entities of the table the repository is responsible for.
-	FindAll() []*Entity
+	FindAll() []Entity
 	// Inserts a given entity into the corresponding table. If the entity
 	// already exists, an error will be returned.
-	Insert(e *Entity) error
+	Insert(e Entity) error
 	// Updates a given entity. If it doesn't exist yet, it will be inserted.
-	Update(e *Entity) error
+	Update(e Entity) error
 	// Deletes a given entity from its containing table.
-	Delete(e *Entity) error
+	Delete(e Entity) error
 }
