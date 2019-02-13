@@ -14,9 +14,9 @@ import (
 type Command struct {
 	Use     string
 	Help    string
-	Params  []*Param
-	Options []*Option
-	Run     func(options []*Param) error
+	Params  map[string]*Param
+	Options map[string]*Option
+	Run     func(self *Command) error
 }
 
 // Adds a new param to a given command. Since duplicate param names aren't
@@ -27,7 +27,7 @@ func (cmd *Command) AddParam(p *Param) error {
 			return errors.New("param name already exists")
 		}
 	}
-	cmd.Params = append(cmd.Params, p)
+	cmd.Params[p.Name] = p
 	return nil
 }
 
@@ -39,6 +39,6 @@ func (cmd *Command) AddOption(o *Option) error {
 			return errors.New("option name already exists")
 		}
 	}
-	cmd.Options = append(cmd.Options, o)
+	cmd.Options[o.Name] = o
 	return nil
 }
