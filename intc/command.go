@@ -50,6 +50,17 @@ func NewParam(name, shorthand, help, defVal string) *Param {
 	return p
 }
 
+// Creates a new instance of Param with a non-empty store. Due to the lack
+// of need of any other values like shorthand or default value, only the
+// param name is required.
+func NewParamByStore(name, store string) *Param {
+	p := &Param{
+		flag:  &flag{Name: name},
+		Store: store,
+	}
+	return p
+}
+
 // Creates a new instance of Option and returns a pointer to that instance.
 // Despite Param is an exported type, it is recommended to use this factory
 // since it includes the initialization of an unexported component.
@@ -57,6 +68,17 @@ func NewOption(name, shorthand, help string, defVal bool) *Option {
 	o := &Option{
 		flag:   newFlag(name, shorthand, help),
 		DefVal: defVal,
+	}
+	return o
+}
+
+// Creates a new instance of Option with a non-empty store. Due to the lack
+// of need of any other values like shorthand or default value, only the
+// option name is required.
+func NewOptionByStore(name string, store bool) *Option {
+	o := &Option{
+		flag:  &flag{Name: name},
+		Store: store,
 	}
 	return o
 }

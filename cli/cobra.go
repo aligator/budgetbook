@@ -39,8 +39,8 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	cobraCmd.SetHelpTemplate(cmd.Help)
 	ps := make(map[string]*string)
 	for _, p := range cmd.Params {
-		// Map the returned pointer to the flag value against its name.
-		// Add the flag shorthand only if the shorthand is not empty.
+		// Map the returned pointer to the param value against its name.
+		// Add the parameter shorthand only if the shorthand is not empty.
 		if p.Shorthand != "" {
 			ps[p.Name] = cobraCmd.Flags().StringP(p.Name, p.Shorthand, p.DefVal, p.Help)
 		} else {
@@ -68,11 +68,11 @@ func (c *_cobra) inverse(ctn *container) *intc.Command {
 		cmd := &intc.Command{
 			Use: ctnCmd.Use,
 		}
-		for key, val := range ctn.ParamStore {
-			cmd.AddParam(&intc.Param{
-				Name:  key,
-				Store: *val,
-			})
+		for name, val := range ctn.ParamStore {
+			cmd.AddParam(intc.NewParamByStore(name, *val))
+		}
+		for name, val := range ctn.OptionStore {
+			cmd.AddOption(intc.NewOptionByStore(name, *val))
 		}
 		return cmd
 	}
