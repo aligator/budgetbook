@@ -6,11 +6,6 @@ import (
 
 var Cobra = &_cobra{}
 
-// Explaining the BudgetBook CLI mechanism:
-// ...
-// ...
-// ...
-
 // Proxy defines a method set for transforming an intc.Command into a
 // concrete CLI command provided by the corresponding library.
 type Proxy interface {
