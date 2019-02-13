@@ -28,6 +28,7 @@ type Proxy interface {
 // pointers returned by the transformed flags. After executing the command,
 // the store's values may be used for the intc.Command returned by Parse().
 type container struct {
-	Cmd       interface{}
-	FlagStore map[string]*string
+	Cmd         interface{}
+	ParamStore  map[string]*string
+	OptionStore map[string]*bool
 }
