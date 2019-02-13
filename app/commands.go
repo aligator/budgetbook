@@ -1,6 +1,7 @@
 package app
 
 import (
+	"budgetBook/cmp/category"
 	"budgetBook/intc"
 )
 
@@ -18,13 +19,16 @@ func buildCommandSet() (*intc.Command, []*intc.Command) {
 	addCategory := &intc.Command{
 		Use:  "add-cat",
 		Help: ``,
-		Params: []*intc.Param{
-			intc.NewParam("name", "n", ``, ""),
-			intc.NewParam("budget", "b", ``, ""),
+		Params: map[string]*intc.Param{
+			"name":   intc.NewParam("name", "n", ``, ""),
+			"budget": intc.NewParam("budget", "b", ``, ""),
 		},
-		Options: []*intc.Option{
-			intc.NewOption("is-inc", "i", ``, false),
-			intc.NewOption("is-capped", "c", ``, false),
+		Options: map[string]*intc.Option{
+			"is-inc":    intc.NewOption("is-inc", "i", ``, false),
+			"is-capped": intc.NewOption("is-capped", "c", ``, false),
+		},
+		Run: func(self *intc.Command) error {
+			return category.Create(self)
 		},
 	}
 	cmdSet := []*intc.Command{addCategory}

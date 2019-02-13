@@ -4,7 +4,6 @@ import (
 	"budgetBook/cli"
 	"budgetBook/intc"
 	"budgetBook/persist"
-	"fmt"
 )
 
 // app represents the application itself. Essentially, it consists of a root
@@ -35,17 +34,5 @@ func New() *app {
 // interchangeable command and executing that specific command.
 func (a *app) Run() {
 	execCmd := a.Proxy.Parse()
-	for _, p := range execCmd.Params {
-		if p.Store == "" {
-			p.Store = "-"
-		}
-		fmt.Println(p.Name, ":", p.Store)
-	}
-	for _, opt := range execCmd.Options {
-		store := "false"
-		if opt.Store {
-			store = "true"
-		}
-		fmt.Println(opt.Name, ":", store)
-	}
+	execCmd.Run(execCmd)
 }
