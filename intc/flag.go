@@ -14,14 +14,14 @@ type flag struct {
 type Param struct {
 	*flag
 	DefVal string
-	Store  string
+	S      string
 }
 
 // Option represents a flag of type bool, such as --verbose or --all.
 type Option struct {
 	*flag
 	DefVal bool
-	Store  bool
+	S      bool
 }
 
 // Creates a new instance of Param and returns a pointer to that instance.
@@ -40,8 +40,8 @@ func NewParam(name, shorthand, help, defVal string) *Param {
 // param name is required.
 func NewParamByStore(name, store string) *Param {
 	p := &Param{
-		flag:  &flag{Name: name},
-		Store: store,
+		flag: &flag{Name: name},
+		S:    store,
 	}
 	return p
 }
@@ -62,8 +62,8 @@ func NewOption(name, shorthand, help string, defVal bool) *Option {
 // option name is required.
 func NewOptionByStore(name string, store bool) *Option {
 	o := &Option{
-		flag:  &flag{Name: name},
-		Store: store,
+		flag: &flag{Name: name},
+		S:    store,
 	}
 	return o
 }

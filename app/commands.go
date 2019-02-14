@@ -21,7 +21,7 @@ func buildCommandSet() (*intc.Command, []*intc.Command) {
 		Help: ``,
 		Params: map[string]*intc.Param{
 			"name":   intc.NewParam("name", "n", ``, ""),
-			"budget": intc.NewParam("budget", "b", ``, ""),
+			"budget": intc.NewParam("budget", "b", ``, "0"),
 		},
 		Options: map[string]*intc.Option{
 			"is-inc":    intc.NewOption("is-inc", "i", ``, false),

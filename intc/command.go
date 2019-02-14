@@ -22,8 +22,11 @@ type Command struct {
 // Adds a new param to a given command. Since duplicate param names aren't
 // valid, an error will be returned if the param name already exists.
 func (cmd *Command) AddParam(p *Param) error {
-	for _, param := range cmd.Params {
-		if param.Name == p.Name {
+	if cmd.Params == nil {
+		cmd.Params = make(map[string]*Param)
+	}
+	for key, param := range cmd.Params {
+		if key == p.Name || param.Name == p.Name {
 			return errors.New("param name already exists")
 		}
 	}
@@ -34,8 +37,11 @@ func (cmd *Command) AddParam(p *Param) error {
 // Adds a new option to a given command. Since duplicate option names aren't
 // valid, an error will be returned if the option name already exists.
 func (cmd *Command) AddOption(o *Option) error {
-	for _, opt := range cmd.Options {
-		if opt.Name == o.Name {
+	if cmd.Options == nil {
+		cmd.Options = make(map[string]*Option)
+	}
+	for key, opt := range cmd.Options {
+		if key == o.Name || opt.Name == o.Name {
 			return errors.New("option name already exists")
 		}
 	}
