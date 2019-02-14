@@ -33,6 +33,7 @@ func New() *app {
 // Runs the application by parsing the CLI input, transforming it into an
 // interchangeable command and executing that specific command.
 func (a *app) Run() {
+	defer a.DB.Close()
 	exec := a.Proxy.Parse()
 	_ = exec.Run(exec)
 }

@@ -31,6 +31,17 @@ func buildCommandSet() (*intc.Command, []*intc.Command) {
 			return category.Create(self)
 		},
 	}
-	cmdSet := []*intc.Command{addCategory}
+	displayCategories := &intc.Command{
+		Use: "show-cats",
+		Help: ``,
+		Params: nil,
+		Options: map[string]*intc.Option{
+			"inc-only": intc.NewOption("inc-only", "i", ``, false),
+		},
+		Run: func(self *intc.Command) error {
+			return category.ShowAll()
+		},
+	}
+	cmdSet := []*intc.Command{addCategory, displayCategories}
 	return rootCmd, cmdSet
 }
