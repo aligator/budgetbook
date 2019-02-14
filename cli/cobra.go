@@ -59,6 +59,7 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 		Cmd:         cobraCmd,
 		ParamStore:  ps,
 		OptionStore: os,
+		Handler:     cmd.Run,
 	}
 }
 
@@ -67,6 +68,7 @@ func (c *_cobra) inverse(ctn *container) *intc.Command {
 	if ctnCmd, ok := ctn.Cmd.(*cobra.Command); ok {
 		cmd := &intc.Command{
 			Use: ctnCmd.Use,
+			Run: ctn.Handler,
 		}
 		for name, val := range ctn.ParamStore {
 			cmd.AddParam(intc.NewParamByStore(name, *val))
@@ -86,7 +88,8 @@ func (c *_cobra) Parse() *intc.Command {
 		// Receive the executed command, find and inverse transform it to
 		// an interchangeable command filled with data by the flag store.
 		cmd, _ := rootCmd.ExecuteC()
-		return c.inverse(c.findInCtrSet(cmd))
+		executedCmd := c.findInCtrSet(cmd)
+		return c.inverse(executedCmd)
 	}
 	return nil
 }

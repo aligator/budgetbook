@@ -26,4 +26,5 @@ type container struct {
 	Cmd         interface{}
 	ParamStore  map[string]*string
 	OptionStore map[string]*bool
+	Handler     func(self *intc.Command) error
 }
