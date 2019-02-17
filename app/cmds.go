@@ -1,7 +1,7 @@
 package app
 
 import (
-	"budgetBookArch/app/intc"
+	"budgetBookArch/intc"
 )
 
 func buildCmds() (*intc.Command, []*intc.Command) {
