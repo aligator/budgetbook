@@ -1,14 +1,16 @@
 package handle
 
-import "budgetBookArch/access"
+import (
+	"budgetBookArch/persist"
+)
 
 type Controller interface {
-	DAO() access.Repository
+	DAO() persist.Database
 }
 
 func NewCatController() *catController {
 	c := &catController{
-		Repo: access.New(),
+		db: persist.New(),
 	}
 	return c
 }
