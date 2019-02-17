@@ -1,5 +1,7 @@
 package persist
 
+import "github.com/boltdb/bolt"
+
 type Database interface {
 	Open() error
 	Select(id []byte, table string) []byte
@@ -10,5 +12,8 @@ type Database interface {
 }
 
 func New() Database {
-	return nil
+	b := &_bolt{
+		db: &bolt.DB{},
+	}
+	return b
 }
