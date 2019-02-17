@@ -1,9 +1,9 @@
 package app
 
 import (
+	"budgetBookArch/cli"
 	"budgetBookArch/intc"
 	"budgetBookArch/persist"
-	"budgetBookArch/cli"
 )
 
 type app struct {

@@ -1,8 +1,8 @@
 package access
 
 import (
-	"budgetBookArch/persist"
 	"budgetBookArch/cmp"
+	"budgetBookArch/persist"
 )
 
 type Repository interface {
