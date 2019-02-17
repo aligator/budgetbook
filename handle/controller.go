@@ -11,6 +11,7 @@ type Controller interface {
 func NewCatController() *catController {
 	c := &catController{
 		db: persist.New(),
+		table: "cats",
 	}
 	return c
 }
