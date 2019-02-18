@@ -23,6 +23,7 @@ func (a *app) Run() {
 	defer a.DB.Close()
 	exec, _ := a.Mediator.Parse()
 
+	// Check if a handler has been assigned to the executed command.
 	if exec != nil && exec.Run != nil {
 		exec.Run(exec)
 	}
