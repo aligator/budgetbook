@@ -1,6 +1,7 @@
 package handle
 
 import (
+	"budgetBookArch/conf"
 	"budgetBookArch/persist"
 )
 
@@ -11,7 +12,7 @@ type Controller interface {
 func NewCatController() *catController {
 	c := &catController{
 		db: persist.New(),
-		table: "cats",
+		table: conf.CatTable,
 	}
 	return c
 }
