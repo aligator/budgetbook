@@ -6,6 +6,10 @@ import (
 	"budgetBookArch/persist"
 )
 
+// app represents the application itself. Essentially, it consists of a root
+// command next to a set of sub-commands, a CLI and a database implementation.
+// While it initiates the data flow, the domain specific business logic is
+// depicted in the respective command.
 type app struct {
 	Root     *intc.Command
 	CmdSet   []*intc.Command
@@ -13,8 +17,10 @@ type app struct {
 	DB       persist.Database
 }
 
+// Runs the application by parsing the CLI input and executing the gathered
+// command which delegates the processing to the provided handler.
 func (a *app) Run() {
-	//defer a.DB.Close()
+	defer a.DB.Close()
 	exec, _ := a.Mediator.Parse()
 
 	if exec != nil && exec.Run != nil {
@@ -22,6 +28,9 @@ func (a *app) Run() {
 	}
 }
 
+// Creates a new instance of app and returns a pointer to that instance.
+// This factory function is required since the zero value state of app is
+// not usable without registering the commands in the CLI mediator.
 func New() *app {
 	root, cmdSet := buildCmds()
 	a := &app{

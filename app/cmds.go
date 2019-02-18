@@ -5,11 +5,18 @@ import (
 	"budgetBookArch/intc"
 )
 
+// Builds the entire command set including the root command. It returns general
+// purpose, interchangeable commands that can be transformed by a cli.CLI in
+// order to parse the user input.
 func buildCmds() (*intc.Command, []*intc.Command) {
+	// The root command doesn't perform any action and therefore doesn't take
+	// any parameters or options (except for possible help options provided
+	// by a cli.Mediator implementation).
 	root := &intc.Command{
 		Use:  "budgetbook",
 		Help: ``,
 	}
+	// Creates a new transaction category and stores it in the database.
 	addCategory := &intc.Command{
 		Use:  "add-cat",
 		Help: ``,
@@ -23,6 +30,8 @@ func buildCmds() (*intc.Command, []*intc.Command) {
 		},
 		Run: handle.NewCatController().Create,
 	}
+	// Initialize the actual command set. Aforementioned commands not added to
+	// this slice are not returned and hence not registered in the application.
 	cmdSet := []*intc.Command{addCategory}
 	return root, cmdSet
 }

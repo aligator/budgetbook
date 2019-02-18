@@ -1,17 +1,22 @@
 package cli
 
 import (
+	"budgetBookArch/conf"
 	"budgetBookArch/intc"
-	"budgetBookArch/str"
 	"errors"
 	"github.com/spf13/cobra"
 )
 
+// _cobra is only one of several possible implementations of Mediator. It
+// refers to the cobra library (see github.com/spf13/cobra) and therefore
+// holds instances of cobra.Command as member variables.
+// The preceding underscore is used to avoid package name collisions.
 type _cobra struct {
 	RootCtr *container
 	CtrSet  []*container
 }
 
+// Implements CLI.Register().
 func (c *_cobra) Register(root *intc.Command, cmdSet []*intc.Command) {
 	c.RootCtr = c.transform(root)
 	for _, cmd := range cmdSet {
@@ -25,6 +30,7 @@ func (c *_cobra) Register(root *intc.Command, cmdSet []*intc.Command) {
 	}
 }
 
+// Implements CLI.Parse().
 func (c *_cobra) Parse() (*intc.Command, error) {
 	cobraRoot, ok := c.RootCtr.Cmd.(*cobra.Command)
 	if ok {
@@ -39,9 +45,10 @@ func (c *_cobra) Parse() (*intc.Command, error) {
 		return ctr.AssocCmd, nil
 
 	}
-	return nil, errors.New(cfg.CmdTypeAssertionFailed)
+	return nil, errors.New(conf.CmdTypeAssertionFailed)
 }
 
+// Implements CLI.transform().
 func (c *_cobra) transform(cmd *intc.Command) *container {
 	cobraCmd := &cobra.Command{
 		Use: cmd.Use,
@@ -60,22 +67,28 @@ func (c *_cobra) transform(cmd *intc.Command) *container {
 	}
 }
 
+// Cobra looks for a sub-command that matches the user input and returns that
+// command. All cobra commands were initialized in transform() and then stored
+// in a container - this function finds that container.
 func (c *_cobra) findInContainers(cmd *cobra.Command) (*container, error) {
+	// Check if the executed command was the root command. The type assertion
+	// is necessary to check the concrete command's use value.
 	if rootCmd, ok := c.RootCtr.Cmd.(*cobra.Command); ok {
 		if rootCmd.Use == cmd.Use {
 			return c.RootCtr, nil
 		}
 	} else {
-		return nil, errors.New(cfg.CmdTypeAssertionFailed)
+		return nil, errors.New(conf.CmdTypeAssertionFailed)
 	}
+	// Otherwise, all containers are scanned for a matching cobra command.
 	for _, ctr := range c.CtrSet {
 		if ctrCmd, ok := ctr.Cmd.(*cobra.Command); ok {
 			if ctrCmd.Use == cmd.Use {
 				return ctr, nil
 			}
 		} else {
-			return nil, errors.New(cfg.CmdTypeAssertionFailed)
+			return nil, errors.New(conf.CmdTypeAssertionFailed)
 		}
 	}
-	return nil, errors.New(cfg.CmdNotFoundInCtrSet)
+	return nil, errors.New(conf.CmdNotFoundInCtrSet)
 }
