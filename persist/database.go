@@ -1,19 +1,27 @@
 package persist
 
-import "github.com/boltdb/bolt"
+import (
+	"budgetBookArch/cmp"
+	"budgetBookArch/conf"
+	"github.com/boltdb/bolt"
+)
 
 type Database interface {
 	Open() error
-	Select(id []byte, table string) []byte
-	Insert(id, val []byte, table string) error
-	Update(id, val []byte, table string) error
-	Delete(id []byte, table string) error
+	Select(id, table string) cmp.Entity
+	Insert(id string, e cmp.Entity, table string) error
+	Update(id string, e cmp.Entity, table string) error
+	Delete(id, table string) error
 	Close() error
 }
 
 func New() Database {
 	b := &_bolt{
-		db: &bolt.DB{},
+		db:       &bolt.DB{},
+		name:     conf.DbName,
+		catTable: conf.CatTable,
+		txTable:  conf.TxTable,
+		timeout:  conf.BoltDBTimeout,
 	}
 	return b
 }
