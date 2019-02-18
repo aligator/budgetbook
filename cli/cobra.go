@@ -39,7 +39,7 @@ func (c *_cobra) Parse() (*intc.Command, error) {
 		return ctr.AssocCmd, nil
 
 	}
-	return nil, errors.New(str.CmdTypeAssertionFailed)
+	return nil, errors.New(cfg.CmdTypeAssertionFailed)
 }
 
 func (c *_cobra) transform(cmd *intc.Command) *container {
@@ -66,7 +66,7 @@ func (c *_cobra) findInContainers(cmd *cobra.Command) (*container, error) {
 			return c.RootCtr, nil
 		}
 	} else {
-		return nil, errors.New(str.CmdTypeAssertionFailed)
+		return nil, errors.New(cfg.CmdTypeAssertionFailed)
 	}
 	for _, ctr := range c.CtrSet {
 		if ctrCmd, ok := ctr.Cmd.(*cobra.Command); ok {
@@ -74,8 +74,8 @@ func (c *_cobra) findInContainers(cmd *cobra.Command) (*container, error) {
 				return ctr, nil
 			}
 		} else {
-			return nil, errors.New(str.CmdTypeAssertionFailed)
+			return nil, errors.New(cfg.CmdTypeAssertionFailed)
 		}
 	}
-	return nil, errors.New(str.CmdNotFoundInCtrSet)
+	return nil, errors.New(cfg.CmdNotFoundInCtrSet)
 }

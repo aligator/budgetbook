@@ -19,7 +19,7 @@ func (cmd *Command) AddParam(p *Param) error {
 	}
 	for _, param := range cmd.Params {
 		if param.Name == p.Name {
-			return errors.New(str.CmdParamAlreadyExists)
+			return errors.New(cfg.CmdParamAlreadyExists)
 		}
 	}
 	cmd.Params[p.Name] = p
@@ -32,7 +32,7 @@ func (cmd *Command) AddOption(o *Option) error {
 	}
 	for _, opt := range cmd.Options {
 		if opt.Name == o.Name {
-			return errors.New(str.CmdOptionAlreadyExists)
+			return errors.New(cfg.CmdOptionAlreadyExists)
 		}
 	}
 	cmd.Options[o.Name] = o

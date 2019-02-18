@@ -1,6 +1,7 @@
 package app
 
 import (
+	"budgetBookArch/handle"
 	"budgetBookArch/intc"
 )
 
@@ -20,7 +21,7 @@ func buildCmds() (*intc.Command, []*intc.Command) {
 			"is-inc":    intc.NewOption("is-inc", "i", ``, false, nil),
 			"is-capped": intc.NewOption("is-capped", "c", ``, false, nil),
 		},
-		//Run: handle.NewCatController().Create,
+		Run: handle.NewCatController().Create,
 	}
 	cmdSet := []*intc.Command{addCategory}
 	return root, cmdSet
