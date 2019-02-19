@@ -11,7 +11,7 @@ import (
 // are associated with category.cat and its related types.
 type catController struct {
 	// db represents the DAO that is prescribed by the Controller interface.
-	db    persist.Database
+	db persist.Database
 	// The table that is mainly used by the controller.
 	table string
 }
