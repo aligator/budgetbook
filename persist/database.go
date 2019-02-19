@@ -11,11 +11,19 @@ import (
 // to the respective implementation as every database may store the entities
 // in a different way.
 type Database interface {
+	// Opens a new database connection or file.
 	Open() error
+	// Returns an entity with the specified id from a given table.
 	Select(id, table string) cmp.Entity
+	// Creates a new entry in the specified table. If the entity's type does
+	// not fit in the table, an error will be returned.
 	Insert(id string, e cmp.Entity, table string) error
+	// Updates a given entity under the same preconditions as Insert().
 	Update(id string, e cmp.Entity, table string) error
+	// Deletes a given entity under the same preconditions as Insert().
 	Delete(id, table string) error
+	// Closes the database connection or file. If the database wasn't opened,
+	// an error will be returned.
 	Close() error
 }
 
