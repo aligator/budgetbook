@@ -22,6 +22,9 @@ type exporter struct {
 }
 
 // Implements Entity.MarshalJSON().
+// Since the json.Marshal() function can only access exported fields, the
+// exporter - a identical type with exported fields - is marshaled instead
+// of the actual type.
 func (c *cat) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&exporter{
 		ID:       c.id,
@@ -33,6 +36,8 @@ func (c *cat) MarshalJSON() ([]byte, error) {
 }
 
 // Implements Entity.UnmarshalJSON().
+// exporter is used for the same reason as in MarshalJSON(). The exporter
+// struct will be filled and the actual type's values are read from it.
 func (c *cat) UnmarshalJSON(b []byte) error {
 	exp := &exporter{}
 	if err := json.Unmarshal(b, exp); err != nil {
