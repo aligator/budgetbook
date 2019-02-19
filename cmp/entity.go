@@ -15,7 +15,8 @@ const (
 // Entity represents any model stored in the cmp package. It is mainly used
 // to carry out polymorphism and to prescribe the marshalling functions.
 type Entity interface {
-	// Forces the entity implementation to provide an ID for persistence.
+	// Forces the entity implementation to provide an ID for persistence. It
+	// is recommended to create a dedicated function for creating these IDs.
 	ID() string
 	// Converts the entity into JSON, which is stored as a byte slice.
 	MarshalJSON() ([]byte, error)
