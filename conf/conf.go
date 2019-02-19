@@ -9,9 +9,11 @@ const (
 	CmdNotFoundInCtrSet    = "command not found in CLI library's container set"
 	CmdParamAlreadyExists  = "specified param already exists for the command"
 	CmdOptionAlreadyExists = "specified option already exists for the command"
+
 	// Database-related error messages.
 	DbNotOpened      = "database implementation is not opened or nil"
 	TableNotExisting = "specified table does not exist"
+
 	// Database-related config values.
 	DbName        = "budgetbook"
 	CatTable      = "cats"
