@@ -6,6 +6,10 @@ import (
 	"github.com/boltdb/bolt"
 )
 
+// Database provides functions for the common CRUD operations that can be
+// performed on any implementation of Entity. All further processing is up
+// to the respective implementation as every database may store the entities
+// in a different way.
 type Database interface {
 	Open() error
 	Select(id, table string) cmp.Entity
@@ -15,6 +19,10 @@ type Database interface {
 	Close() error
 }
 
+// Creates a new instance of a Database implementation and returns a pointer
+// to that instance. Any implementation should be an unexported type to force
+// the use of this factory.
+// All configuration values for the implementation are defined here.
 func New() Database {
 	b := &_bolt{
 		db:       &bolt.DB{},
