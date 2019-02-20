@@ -71,7 +71,28 @@ func (b *_bolt) Select(id, table string) cmp.Entity {
 
 // Implements Database.SelectAll().
 func (b *_bolt) SelectAll(table string) []cmp.Entity {
-	return nil
+	var res []cmp.Entity
+	view := func(btx *bolt.Tx) error {
+		b := btx.Bucket([]byte(b.name)).Bucket([]byte(table))
+		if b == nil {
+			return errors.New(conf.TableNotExisting)
+		}
+		// Iterate over all entries the bucket contains, create an empty
+		// entity and invoke UnmarshalJSON() to transmit the data into it.
+		b.ForEach(func(key, bytes []byte) error {
+			var e cmp.Entity
+			err := e.UnmarshalJSON(bytes)
+			if err != nil {
+				return err
+			}
+			// Add the entity to the result set as unmarshalling was successful.
+			res = append(res, e)
+			return nil
+		})
+		return nil
+	}
+	_ = b.db.View(view)
+	return res
 }
 
 // Implements Database.Insert().
