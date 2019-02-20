@@ -1,8 +1,8 @@
 package handle
 
 import (
-	"budgetBookArch/conf"
-	"budgetBookArch/persist"
+	"budgetBook/conf"
+	"budgetBook/persist"
 )
 
 // Controller is responsible for delegating the command the user has entered

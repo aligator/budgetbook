@@ -1,9 +1,9 @@
 package app
 
 import (
-	"budgetBookArch/cli"
-	"budgetBookArch/intc"
-	"budgetBookArch/persist"
+	"budgetBook/cli"
+	"budgetBook/intc"
+	"budgetBook/persist"
 )
 
 // app represents the application itself. Essentially, it consists of a root

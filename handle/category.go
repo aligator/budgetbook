@@ -1,9 +1,9 @@
 package handle
 
 import (
-	"budgetBookArch/cmp/category"
-	"budgetBookArch/intc"
-	"budgetBookArch/persist"
+	"budgetBook/cmp/category"
+	"budgetBook/intc"
+	"budgetBook/persist"
 	"strconv"
 )
 

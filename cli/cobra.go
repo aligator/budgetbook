@@ -1,15 +1,15 @@
 package cli
 
 import (
-	"budgetBookArch/conf"
-	"budgetBookArch/intc"
+	"budgetBook/conf"
+	"budgetBook/intc"
 	"errors"
 	"github.com/spf13/cobra"
 )
 
-// _cobra is only one of several possible implementations of Mediator. It
-// refers to the cobra library (see github.com/spf13/cobra) and therefore
-// holds instances of cobra.Command as member variables.
+// _cobra is only one of several possible implementations of CLI. It refers
+// to the cobra library (see github.com/spf13/cobra) and therefore holds
+// instances of cobra.Command as struct fields.
 // The preceding underscore is used to avoid package name collisions.
 type _cobra struct {
 	RootCtr *container

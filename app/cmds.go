@@ -1,8 +1,8 @@
 package app
 
 import (
-	"budgetBookArch/handle"
-	"budgetBookArch/intc"
+	"budgetBook/handle"
+	"budgetBook/intc"
 )
 
 // Builds the entire command set including the root command. It returns general

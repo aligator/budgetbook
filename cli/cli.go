@@ -1,6 +1,6 @@
 package cli
 
-import "budgetBookArch/intc"
+import "budgetBook/intc"
 
 // CLI defines a method set for transforming an general-purpose intc.Command
 // into a concrete command type of any CLI library. These concrete commands

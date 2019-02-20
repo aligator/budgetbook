@@ -1,7 +1,7 @@
 package intc
 
 import (
-	"budgetBookArch/conf"
+	"budgetBook/conf"
 	"errors"
 )
 

@@ -1,6 +1,6 @@
 package main
 
-import "budgetBookArch/app"
+import "budgetBook/app"
 
 func main() {
 	// Instantiates a new application, parses the CLI input and runs the

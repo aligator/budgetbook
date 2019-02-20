@@ -1,8 +1,8 @@
 package persist
 
 import (
-	"budgetBookArch/cmp"
-	"budgetBookArch/conf"
+	"budgetBook/cmp"
+	"budgetBook/conf"
 	"github.com/boltdb/bolt"
 )
 

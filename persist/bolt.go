@@ -1,7 +1,7 @@
 package persist
 
 import (
-	"budgetBookArch/cmp"
+	"budgetBook/cmp"
 	"github.com/boltdb/bolt"
 	"os"
 	"time"
