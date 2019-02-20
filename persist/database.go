@@ -11,7 +11,9 @@ import (
 // to the respective implementation as every database may store the entities
 // in a different way.
 type Database interface {
-	// Opens a new database connection or file.
+	// Opens a new database connection or file. In case the database can't be
+	// opened or the required tables can not be created, a corresponding error
+	// will be returned.
 	Open() error
 	// Returns an entity with the specified id from a given table.
 	Select(id, table string) cmp.Entity
