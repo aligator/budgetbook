@@ -30,6 +30,11 @@ func (c *catController) Create(cmd *intc.Command) error {
 	return c.db.Insert(cat.ID(), cat, c.table)
 }
 
+// Retrieves all categories from the database and prints them.
+func (c *catController) Show(cmd *intc.Command) error {
+	return nil
+}
+
 // Implements Controller.DAO().
 func (c *catController) DAO() persist.Database {
 	return c.db

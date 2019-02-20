@@ -30,8 +30,18 @@ func buildCmds() (*intc.Command, []*intc.Command) {
 		},
 		Run: handle.NewCatController().Create,
 	}
+	// Prints all stored categories.
+	showCategories := &intc.Command{
+		Use: "show-cats",
+		Help: ``,
+		Params: nil,
+		Options: map[string]*intc.Option{
+			"inc-only": intc.NewOption("in-only", "i", ``, false, nil),
+		},
+		Run: handle.NewCatController().Show,
+	}
 	// Initialize the actual command set. Aforementioned commands not added to
 	// this slice are not returned and hence not registered in the application.
-	cmdSet := []*intc.Command{addCategory}
+	cmdSet := []*intc.Command{addCategory, showCategories}
 	return root, cmdSet
 }
