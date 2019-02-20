@@ -2,7 +2,9 @@ package persist
 
 import (
 	"budgetBook/cmp"
+	"budgetBook/conf"
 	"github.com/boltdb/bolt"
+	"github.com/pkg/errors"
 	"os"
 	"time"
 )
@@ -11,7 +13,7 @@ import (
 // need any database server - it stores all entities in a key-value-file instead.
 // Yet it is only one of several possible types to satisfy the Database interface.
 type _bolt struct {
-	db       *bolt.DB
+	db *bolt.DB
 	// The database name will also be used as the identifier of the root bucket.
 	name     string
 	catTable string
@@ -47,6 +49,29 @@ func (b *_bolt) Open() error {
 
 // Implements Database.Select().
 func (b *_bolt) Select(id, table string) cmp.Entity {
+	var e cmp.Entity
+	view := func(btx *bolt.Tx) error {
+		// Pick the desired bucket from the root's children and check if the
+		// bucket exists.
+		b := btx.Bucket([]byte(b.name)).Bucket([]byte(table))
+		if b == nil {
+			return errors.New(conf.TableNotExisting)
+		}
+		entityId := []byte(id)
+		// Try to retrieve the JSON value for the entry with the given id. If
+		// a matching entry was found, the JSON is unmarshaled in order to fill
+		// the cmp.Entity's fields.
+		if bytes := b.Get(entityId); bytes != nil {
+			return e.UnmarshalJSON(bytes)
+		}
+		return nil
+	}
+	_ = b.db.View(view)
+	return e
+}
+
+// Implements Database.SelectAll().
+func (b *_bolt) SelectAll(table string) []cmp.Entity {
 	return nil
 }
 

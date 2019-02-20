@@ -7,9 +7,9 @@ import (
 )
 
 // Database provides functions for the common CRUD operations that can be
-// performed on any implementation of Entity. All further processing is up
-// to the respective implementation as every database may store the entities
-// in a different way.
+// performed on any implementation of Entity. As every method simply takes an
+// entity next to a table name, the respective implementation doesn't know which
+// concrete entity type it currently processes.
 type Database interface {
 	// Opens a new database connection or file. In case the database can't be
 	// opened or the required tables can not be created, a corresponding error
@@ -17,6 +17,9 @@ type Database interface {
 	Open() error
 	// Returns an entity with the specified id from a given table.
 	Select(id, table string) cmp.Entity
+	// Returns all entities stored in a given table. If there weren't found any
+	// entities or the table doesn't exist, the returned slice will be empty.
+	SelectAll(table string) []cmp.Entity
 	// Creates a new entry in the specified table. If the entity's type does
 	// not fit in the table, an error will be returned.
 	Insert(id string, e cmp.Entity, table string) error
