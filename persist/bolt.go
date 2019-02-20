@@ -59,8 +59,7 @@ func (b *_bolt) Select(id, table string) cmp.Entity {
 		}
 		entityId := []byte(id)
 		// Try to retrieve the JSON value for the entry with the given id. If
-		// a matching entry was found, the JSON is unmarshaled in order to fill
-		// the cmp.Entity's fields.
+		// an entry was found, UnmarshalJSON() fills the entity's fields.
 		if bytes := b.Get(entityId); bytes != nil {
 			return e.UnmarshalJSON(bytes)
 		}
