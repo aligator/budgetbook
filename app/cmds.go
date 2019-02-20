@@ -32,8 +32,8 @@ func buildCmds() (*intc.Command, []*intc.Command) {
 	}
 	// Prints all stored categories.
 	showCategories := &intc.Command{
-		Use: "show-cats",
-		Help: ``,
+		Use:    "show-cats",
+		Help:   ``,
 		Params: nil,
 		Options: map[string]*intc.Option{
 			"inc-only": intc.NewOption("in-only", "i", ``, false, nil),
