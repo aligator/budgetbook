@@ -36,7 +36,7 @@ func buildCmds() (*intc.Command, []*intc.Command) {
 		Help:   ``,
 		Params: nil,
 		Options: map[string]*intc.Option{
-			"inc-only": intc.NewOption("in-only", "i", ``, false, nil),
+			"inc-only": intc.NewOption("inc-only", "i", ``, false, nil),
 		},
 		Run: handle.NewCatController().Show,
 	}
