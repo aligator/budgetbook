@@ -15,10 +15,11 @@ type Database interface {
 	// opened or the required tables can not be created, a corresponding error
 	// will be returned.
 	Open() error
-	// Returns an entity with the specified id from a given table.
+	// Returns an entity with the specified id from a given table. If the entity
+	// wasn't found or the table doesn't exist, the returned slice will be empty.
 	Select(id, table string) cmp.Entity
-	// Returns all entities stored in a given table. If there weren't found any
-	// entities or the table doesn't exist, the returned slice will be empty.
+	// Returns all entities stored in a given table with the same return behaviour
+	// as Select().
 	SelectAll(table string) []cmp.Entity
 	// Creates a new entry in the specified table. If the entity's type does
 	// not fit in the table, an error will be returned.
