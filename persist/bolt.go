@@ -97,20 +97,36 @@ func (b *_bolt) SelectAll(table string) []cmp.Entity {
 
 // Implements Database.Insert().
 func (b *_bolt) Insert(id string, e cmp.Entity, table string) error {
-	return nil
+	update := func(btx *bolt.Tx) error {
+		b := btx.Bucket([]byte(b.name)).Bucket([]byte(table))
+		if b == nil {
+			return errors.New(conf.TableNotExisting)
+		}
+		// Marshal the JSON from the entity and insert a new entry with Put().
+		// If the given ID is already used, an error will be thrown.
+		if bytes, err := e.MarshalJSON(); err != nil {
+			return b.Put([]byte(id), bytes)
+		}
+		return errors.New(conf.MarshallingFailed)
+	}
+	return b.db.Update(update)
 }
 
 // Implements Database.Update().
 func (b *_bolt) Update(id string, e cmp.Entity, table string) error {
-	return nil
+	// In the particular case of BoltDB, Update() just calls Insert() as the
+	// stored entity mapped against the specified key will be overwritten.
+	return b.Insert(id, e, table)
 }
 
 // Implements Database.Delete().
 func (b *_bolt) Delete(id, table string) error {
+	// Not implemented yet.
 	return nil
 }
 
 // Implements Database.Close().
 func (b *_bolt) Close() error {
+	// Not implemented yet.
 	return b.db.Close()
 }

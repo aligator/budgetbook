@@ -10,8 +10,9 @@ const (
 	CmdOptionAlreadyExists = "specified option already exists for the command"
 
 	// Database-related error messages.
-	DbNotOpened      = "database implementation is not opened or nil"
-	TableNotExisting = "specified table does not exist"
+	DbNotOpened       = "database implementation is not opened or nil"
+	TableNotExisting  = "specified table does not exist"
+	MarshallingFailed = "marshalling the entity failed"
 
 	// Database-related config values.
 	DbName        = "budgetbook"
