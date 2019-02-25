@@ -10,8 +10,7 @@ import (
 // order to parse the user input.
 func buildCmds() (*intc.Command, []*intc.Command) {
 	// The root command doesn't perform any action and therefore doesn't take
-	// any parameters or options (except for possible help options provided
-	// by a cli.Mediator implementation).
+	// any parameters or options (except automatically added help flags).
 	root := &intc.Command{
 		Use:  "budgetbook",
 		Help: ``,
