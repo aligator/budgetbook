@@ -136,7 +136,11 @@ func (b *_bolt) Delete(id, table string) error {
 // Implements Database.Close().
 func (b *_bolt) Close() error {
 	if b.isOpened {
-		return b.db.Close()
+		if err := b.db.Close(); err != nil {
+			return err
+		}
+		b.isOpened = false
+		return nil
 	}
 	return errors.New(conf.DbNotOpened)
 }
