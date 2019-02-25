@@ -45,5 +45,8 @@ func New() Database {
 		txTable:  conf.TxTable,
 		timeout:  conf.BoltDBTimeout,
 	}
+	if !b.isOpened {
+		b.Open()
+	}
 	return b
 }

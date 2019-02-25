@@ -19,6 +19,7 @@ type _bolt struct {
 	catTable string
 	txTable  string
 	timeout  time.Duration
+	isOpened bool
 }
 
 // Implements Database.Open().
@@ -33,6 +34,7 @@ func (b *_bolt) Open() error {
 	if err != nil {
 		return err
 	}
+	b.isOpened = true
 	create := func(btx *bolt.Tx) error {
 		// The root bucket rather represents the database itself than a specific
 		// table. Any tables are depicted as child buckets of root.
@@ -133,5 +135,8 @@ func (b *_bolt) Delete(id, table string) error {
 
 // Implements Database.Close().
 func (b *_bolt) Close() error {
-	return b.db.Close()
+	if b.isOpened {
+		return b.db.Close()
+	}
+	return errors.New(conf.DbNotOpened)
 }
