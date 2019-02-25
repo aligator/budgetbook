@@ -121,12 +121,17 @@ func (b *_bolt) Update(id string, e cmp.Entity, table string) error {
 
 // Implements Database.Delete().
 func (b *_bolt) Delete(id, table string) error {
-	// Not implemented yet.
-	return nil
+	update := func(btx *bolt.Tx) error {
+		b := btx.Bucket([]byte(b.name)).Bucket([]byte(table))
+		if b == nil {
+			return errors.New(conf.TableNotExisting)
+		}
+		return b.Delete([]byte(id))
+	}
+	return b.db.Update(update)
 }
 
 // Implements Database.Close().
 func (b *_bolt) Close() error {
-	// Not implemented yet.
 	return b.db.Close()
 }
