@@ -34,8 +34,8 @@ func (c *catController) Create(cmd *intc.Command) error {
 // Retrieves all categories from the database and prints them.
 func (c *catController) Show(cmd *intc.Command) error {
 	cats := c.db.SelectAll(c.table)
-	for _, c := range cats {
-		fmt.Println(c.ID())
+	for _, cat := range cats {
+		fmt.Println(cat.ID())
 	}
 	return nil
 }

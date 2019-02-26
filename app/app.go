@@ -20,7 +20,7 @@ type app struct {
 // Runs the application by parsing the CLI input and executing the gathered
 // command which delegates the processing to the provided handler.
 func (a *app) Run() {
-	defer a.DB.Close()
+	//defer a.DB.Close()
 	exec, _ := a.Mediator.Parse()
 
 	// Check if a handler has been assigned to the executed command.
@@ -38,7 +38,7 @@ func New() *app {
 		Root:     root,
 		CmdSet:   cmdSet,
 		Mediator: cli.New(),
-		DB:       persist.New(),
+		DB:       nil,
 	}
 	a.Mediator.Register(a.Root, a.CmdSet)
 	return a

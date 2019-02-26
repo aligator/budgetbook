@@ -18,8 +18,12 @@ type Controller interface {
 // Creates a new instance of catController and returns a pointer to that instance.
 // This factory chooses the Database implementation being used as DAO.
 func NewCatController() *catController {
+	db, err := persist.New()
+	if err != nil {
+		panic(err)
+	}
 	c := &catController{
-		db: persist.New(),
+		db:    db,
 		table: conf.CatTable,
 	}
 	return c

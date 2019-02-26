@@ -37,7 +37,7 @@ type Database interface {
 // to that instance. Any implementation should be an unexported type to force
 // the use of this factory.
 // All configuration values for the implementation are defined here.
-func New() Database {
+func New() (Database, error) {
 	b := &_bolt{
 		db:       &bolt.DB{},
 		name:     conf.DbName,
@@ -46,7 +46,9 @@ func New() Database {
 		timeout:  conf.BoltDBTimeout,
 	}
 	if !b.isOpened {
-		b.Open()
+		if err := b.Open(); err != nil {
+			return nil, err
+		}
 	}
-	return b
+	return b, nil
 }
