@@ -108,10 +108,11 @@ func (b *_bolt) Insert(id string, e cmp.Entity, table string) error {
 		}
 		// Marshal the JSON from the entity and insert a new entry with Put().
 		// If the given ID is already used, an error will be thrown.
-		if bytes, err := e.MarshalJSON(); err != nil {
-			return b.Put([]byte(id), bytes)
+		bytes, err := e.MarshalJSON()
+		if err != nil {
+			return errors.New(conf.MarshallingFailed)
 		}
-		return errors.New(conf.MarshallingFailed)
+		return b.Put([]byte(id), bytes)
 	}
 	return b.db.Update(update)
 }
