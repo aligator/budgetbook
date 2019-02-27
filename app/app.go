@@ -4,6 +4,7 @@ import (
 	"budgetBook/cli"
 	"budgetBook/intc"
 	"budgetBook/persist"
+	"fmt"
 )
 
 // app represents the application itself. Essentially, it consists of a root
@@ -25,7 +26,9 @@ func (a *app) Run() {
 
 	// Check if a handler has been assigned to the executed command.
 	if exec != nil && exec.Run != nil {
-		exec.Run(exec)
+		if err := exec.Run(exec); err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 

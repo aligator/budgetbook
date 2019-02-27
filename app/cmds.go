@@ -9,6 +9,7 @@ import (
 // purpose, interchangeable commands that can be transformed by a cli.CLI in
 // order to parse the user input.
 func buildCmds() (*intc.Command, []*intc.Command) {
+	catController := handle.NewCatController()
 	// The root command doesn't perform any action and therefore doesn't take
 	// any parameters or options (except automatically added help flags).
 	root := &intc.Command{
@@ -27,7 +28,7 @@ func buildCmds() (*intc.Command, []*intc.Command) {
 			"is-inc":    intc.NewOption("is-inc", "i", ``, false, nil),
 			"is-capped": intc.NewOption("is-capped", "c", ``, false, nil),
 		},
-		Run: handle.NewCatController().Create,
+		Run: catController.Create,
 	}
 	// Prints all stored categories.
 	showCategories := &intc.Command{
@@ -37,7 +38,7 @@ func buildCmds() (*intc.Command, []*intc.Command) {
 		Options: map[string]*intc.Option{
 			"inc-only": intc.NewOption("inc-only", "i", ``, false, nil),
 		},
-		Run: handle.NewCatController().Show,
+		Run: catController.Show,
 	}
 	// Initialize the actual command set. Aforementioned commands not added to
 	// this slice are not returned and hence not registered in the application.
