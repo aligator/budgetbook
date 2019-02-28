@@ -18,9 +18,9 @@ type Database interface {
 	// Returns an entity with the specified id from a given table. If the entity
 	// wasn't found or the table doesn't exist, the returned slice will be empty.
 	Select(id, table string) cmp.Entity
-	// Returns all entities stored in a given table with the same return behaviour
-	// as Select().
-	SelectAll(table string) []cmp.Entity
+	// Returns all entities stored in a given table as a byte array with the same
+	// return behaviour as Select().
+	SelectAll(table string) [][]byte
 	// Creates a new entry in the specified table. If the entity's type does
 	// not fit in the table, an error will be returned.
 	Insert(id string, e cmp.Entity, table string) error

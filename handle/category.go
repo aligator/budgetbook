@@ -33,8 +33,10 @@ func (c *catController) Create(cmd *intc.Command) error {
 
 // Retrieves all categories from the database and prints them.
 func (c *catController) Show(cmd *intc.Command) error {
-	cats := c.db.SelectAll(c.table)
-	for _, cat := range cats {
+	catBytes := c.db.SelectAll(c.table)
+	for _, bytes := range catBytes {
+		cat := category.New("", false, false, 0)
+		cat.UnmarshalJSON(bytes)
 		fmt.Println(cat.ID())
 	}
 	return nil

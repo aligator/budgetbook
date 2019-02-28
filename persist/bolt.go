@@ -72,26 +72,19 @@ func (b *_bolt) Select(id, table string) cmp.Entity {
 }
 
 // Implements Database.SelectAll().
-func (b *_bolt) SelectAll(table string) []cmp.Entity {
+func (b *_bolt) SelectAll(table string) [][]byte {
 	if ok, _ := b.check(); !ok {
 		return nil
 	}
-	var res []cmp.Entity
+	var res [][]byte
 	_ = b.db.View(func(btx *bolt.Tx) error {
 		b := btx.Bucket([]byte(b.name)).Bucket([]byte(table))
 		if b == nil {
 			return errors.New(conf.TableNotExisting)
 		}
-		// Iterate over all entries the bucket contains, create an empty entity
-		// and invoke UnmarshalJSON() to transfer the data into it.
+		// Iterate over all entries the bucket contains and return their bytes.
 		b.ForEach(func(key, bytes []byte) error {
-			var e cmp.Entity
-			err := e.UnmarshalJSON(bytes)
-			if err != nil {
-				return err
-			}
-			// Add the entity to the result set as unmarshalling was successful.
-			res = append(res, e)
+			res = append(res, bytes)
 			return nil
 		})
 		return nil
