@@ -35,9 +35,10 @@ func (c *catController) Create(cmd *intc.Command) error {
 func (c *catController) Show(cmd *intc.Command) error {
 	catBytes := c.db.SelectAll(c.table)
 	for _, bytes := range catBytes {
-		cat := category.New("", false, false, 0)
-		cat.UnmarshalJSON(bytes)
-		fmt.Println(cat.ID())
+		cat := category.Empty()
+		if err := cat.UnmarshalJSON(bytes); err != nil {
+			fmt.Println(cat.ID())
+		}
 	}
 	return nil
 }

@@ -54,7 +54,7 @@ func (c *cat) UnmarshalJSON(b []byte) error {
 // Implements Entity.ID().
 func (c *cat) ID() string { return c.id }
 
-// Creates a new instance of Cat and returns a pointer to that instance.
+// Creates a new instance of cat and returns a pointer to that instance.
 // Using this factory function is required as it includes some validations.
 func New(name string, isInc bool, isCapped bool, budget int) *cat {
 	if isInc {
@@ -71,6 +71,14 @@ func New(name string, isInc bool, isCapped bool, budget int) *cat {
 		isCapped: isCapped,
 		budget:   budget,
 	}
+	return c
+}
+
+// Creates a new empty instance of cat and returns a pointer to that instance.
+// Its main purpose is to serve as an instance to be populated with unmarshalled
+// JSON data.
+func Empty() *cat {
+	c := &cat{}
 	return c
 }
 
