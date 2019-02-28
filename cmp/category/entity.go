@@ -1,6 +1,8 @@
 package category
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 // cat represents any type of financial transaction category.
 type cat struct {
@@ -53,6 +55,18 @@ func (c *cat) UnmarshalJSON(b []byte) error {
 
 // Implements Entity.ID().
 func (c *cat) ID() string { return c.id }
+
+// Implements Entity.ToString().
+func (c *cat) ToString() string {
+	//sb := strings.Builder{}
+	//sb.Write([]byte(c.name))
+	//var budgetStorage []byte
+	//binary.LittleEndian.PutUint64(budgetStorage, uint64(c.budget))
+	//sb.Write(budgetStorage)
+	//sb.Write([]byte("\n"))
+	//return sb.String()
+	return "Toll!"
+}
 
 // Creates a new instance of cat and returns a pointer to that instance.
 // Using this factory function is required as it includes some validations.

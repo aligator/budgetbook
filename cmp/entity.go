@@ -22,4 +22,6 @@ type Entity interface {
 	MarshalJSON() ([]byte, error)
 	// Fills an empty entity instance with values from JSON.
 	UnmarshalJSON(b []byte) error
+	// Returns a string that represents the entity instance.
+	ToString() string
 }
