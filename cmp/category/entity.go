@@ -1,7 +1,9 @@
 package category
 
 import (
+	"encoding/binary"
 	"encoding/json"
+	"strings"
 )
 
 // cat represents any type of financial transaction category.
@@ -58,14 +60,13 @@ func (c *cat) ID() string { return c.id }
 
 // Implements Entity.ToString().
 func (c *cat) ToString() string {
-	//sb := strings.Builder{}
-	//sb.Write([]byte(c.name))
-	//var budgetStorage []byte
-	//binary.LittleEndian.PutUint64(budgetStorage, uint64(c.budget))
-	//sb.Write(budgetStorage)
-	//sb.Write([]byte("\n"))
-	//return sb.String()
-	return "Toll!"
+	sb := strings.Builder{}
+	sb.Write([]byte(c.name))
+	budgetStorage := make([]byte, 64)
+	binary.LittleEndian.PutUint64(budgetStorage, uint64(c.budget))
+	sb.Write(budgetStorage)
+	sb.Write([]byte("\n"))
+	return sb.String()
 }
 
 // Creates a new instance of cat and returns a pointer to that instance.

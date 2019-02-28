@@ -36,7 +36,7 @@ func (c *catController) Show(cmd *intc.Command) error {
 	catBytes := c.db.SelectAll(c.table)
 	for _, bytes := range catBytes {
 		cat := category.Empty()
-		if err := cat.UnmarshalJSON(bytes); err != nil {
+		if err := cat.UnmarshalJSON(bytes); err == nil {
 			fmt.Println(cat.ToString())
 		}
 	}
