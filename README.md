@@ -1,6 +1,6 @@
 # <img src="https://sternentstehung.de/budgetbook-md.png" alt="BudgetBook"> BudgetBook
 
-A simple CLI tool for managing your personal fincances.
+> A simple CLI tool for managing your personal fincances.
 
 ## Installation and Usage
 
