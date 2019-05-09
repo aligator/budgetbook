@@ -1,4 +1,4 @@
-# <img src="https://sternentstehung.de/budgetbook-md.png" alt="BudgetBook"> BudgetBook
+# BudgetBook
 
 > A simple CLI tool for managing your personal fincances.
 
