@@ -2,10 +2,24 @@ package app
 
 import (
 	"budgetBook/cli"
+	"budgetBook/gui"
 	"budgetBook/intc"
 	"budgetBook/persist"
 	"fmt"
+	"log"
+	"net/http"
 )
+
+type App interface {
+	Run()
+}
+
+// a simple Writer to StdOut using fmt.Println
+type StdWriter struct{}
+
+func (StdWriter) Write(p []byte) (n int, err error) {
+	return fmt.Println(p)
+}
 
 // app represents the application itself. Essentially, it consists of a root
 // command next to a set of sub-commands, a CLI and a database implementation.
@@ -26,7 +40,7 @@ func (a *app) Run() {
 
 	// Check if a handler has been assigned to the executed command.
 	if exec != nil && exec.Run != nil {
-		if err := exec.Run(exec); err != nil {
+		if err := exec.Run(exec, StdWriter{}); err != nil {
 			fmt.Println(err)
 		}
 	}
@@ -44,5 +58,36 @@ func New() *app {
 		DB:       nil,
 	}
 	a.Mediator.Register(a.Root, a.CmdSet)
+	return a
+}
+
+type webApp struct {
+	Root     *intc.Command
+	CmdSet   []*intc.Command
+	Mediator gui.Gui
+	DB       persist.Database
+	Addr     string
+}
+
+func (a *webApp) Run() {
+	log.Fatal(http.ListenAndServe(a.Addr, nil))
+	// start server
+	// show all cats
+	// make actions for each command
+}
+
+func NewServer(addr string) *webApp {
+	root, cmdSet := buildCmds()
+
+	a := &webApp{
+		Root:     root,
+		CmdSet:   cmdSet,
+		Mediator: gui.NewWeb(),
+		DB:       nil,
+		Addr:     addr,
+	}
+
+	a.Mediator.Register(a.Root, a.CmdSet)
+
 	return a
 }

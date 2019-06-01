@@ -3,6 +3,7 @@ package intc
 import (
 	"budgetBook/conf"
 	"errors"
+	"io"
 )
 
 // In general, intc.Command is used to depict any feature of the application
@@ -17,7 +18,7 @@ type Command struct {
 	Help    string
 	Params  map[string]*Param
 	Options map[string]*Option
-	Run     func(cmd *Command) error
+	Run     func(cmd *Command, w io.Writer) error
 }
 
 // Adds a new param to a given command. Since duplicate param names aren't
